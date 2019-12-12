@@ -1,7 +1,7 @@
                                               NFS (Network File System)
 Network File System is created to share files between systems.
 There is one server and multiple clients. 
-So the clients who are connected to this server can share all the files and it will synced for everyone.
+So the clients who are connected to this server can share all the files and it will be synced for everyone.
 
 Server setup
 su (become root user)
@@ -15,8 +15,8 @@ close the /etc/exports file
 ( rw = read-write access will be provided to both client and the server
   sync = all the files will be synced for every client and the server and happens after the changes are commited
   no_root_squash = by this root user can connect to the shared directory
-  no_subtree_check = this means whenever the files get uploaded and if the shared directory is subdirectory then there be no check
-                      for the file permissions which is more reliable.
+  no_subtree_check = this means whenever the files get uploaded and if the shared directory is subdirectory then there be no 
+                      check for the file permissions which is more reliable.
 )
 exportfs -a (after every update in the entries of /etc/exports you need to run this command, this reloads the file /etc/exports)
 
