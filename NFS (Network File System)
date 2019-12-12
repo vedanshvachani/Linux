@@ -1,0 +1,52 @@
+                                              NFS (Network File System)
+Network File System is created to share files between systems.
+There is one server and multiple clients. 
+So the clients who are connected to this server can share all the files and it will synced for everyone.
+
+Server setup
+su (become root user)
+yum install nfs-utils (will install all the necessary packages for nfs)
+systemctl start nfs-server (will start the service for nfs-server)
+mkdir /nfs-share (this will be the main directory where all the files will be shared).
+vi /etc/exports
+/nfs-share 192.168.x.x (rw,sync,no_root_squash,no_subtree_check)
+192.168.x.x will be clients ip address.
+close the /etc/exports file
+( rw = read-write access will be provided to both client and the server
+  sync = all the files will be synced for every client and the server and happens after the changes are commited
+  no_root_squash = by this root user can connect to the shared directory
+  no_subtree_check = this means whenever the files get uploaded and if the shared directory is subdirectory then there be no check
+                      for the file permissions which is more reliable.
+)
+exportfs -a (after every update in the entries of /etc/exports you need to run this command, this reloads the file /etc/exports)
+
+Server Setup is done
+
+Client Setup
+su (become root user)
+yum install nfs-utils
+showmount -e 192.168.x.x (this ip is server's ip address)
+You will see the entries of /etc/exports
+
+Before executing rest commands go back to the server and type
+iptables -F (as client cannont connect with the server because the connection is getting blocked.
+            This will flush all the riles from iptables.)
+            
+ Come back to client
+ mkdir /mnt/nfs-share
+ mount -t nfs 192.168.x.x:/nfs-share /mnt/nfs-share (the shared directory which was created on server will be mounted on 
+            /mnt/nfs-share. )
+ (If the mount is not happening try executing iptables -F on the server again. )
+ mount | grep nfs (to check if the directory is mounted or not)
+ ( Try creating files in /mnt/nfs-share )
+ touch /mnt/nfs-share/test
+ (You will see this file on the client as well as on the server. )
+ 
+ For permanent mount in the client's system.
+ vi /etc/fstab (add a entry)
+ 192.168.x.x:/nfs-share /mnt/nfs-share nfs defaults 0 0 ( 192.168.x.x is the server's ip address)
+ exit the /etc/fstab file
+ mount -a (instead of reboot, this will mount all the file systems that are mentioned in /etc/fstab entry.)
+ 
+Client Setup is done
+NFS Setup is done. Enjoy!
