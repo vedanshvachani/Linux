@@ -1,0 +1,39 @@
+                                              Linux File System Quotas
+                                              
+Quotas is used to restrict a particular user or a group from creating too many files in the disk.
+With quota the system admin can easily manage the disk space.
+Quotas are used to manage the number of disk blocks and inodes. 
+Quotas are applied on the disk partition
+
+Quota on /home
+Setup for quota
+vi /etc/fstab
+UUID=<uuid of /home> /home ext4 defaults,usrquota,grpquota 0 0 (here we added user and group quota on the /home partition )
+save and exit the file
+mount -a
+still if the /home is not mounted properly you can reboot the system
+
+Quota commands
+quotacheck -cuvg /home (  
+                    -c creates some quota file on the partition that is specified, in our case /home
+                    -u check for user quota
+                    -g check for group quota
+                    -v verbose mode
+                    )
+After executing this command you will see 2 files being created in your partition
+a.) aquota.user   b.) aquota.group
+
+edquota <username/group> ( edquota is a quota file in which you can add how many files a user can create according to the blocks and
+                    inodes. Edit the file.
+                    Soft means warning and Hard means the limit.
+                    )
+
+quotaon /home (This will enable quota on specific file system that is being mentioned.)
+
+Quota has been configured properly on the /home partition. You can try creating files and see if you are getting a warning
+or the error. Warning and error will come if the user tries to exceed the limit. 
+
+If the admin wants to see the report 
+repquota -a
+This will show the report for all the users. 
+                    
