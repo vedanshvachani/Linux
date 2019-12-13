@@ -1,0 +1,55 @@
+                                                NFS AND QUOTA TOGETHER
+
+NFS server is used for sharing files between multiple clients and the server.
+Quota is used to restrict the user or the group for accessing too much space of the disk partition
+
+So in this we will create a nfs on some partition and will put quota on that disk.
+
+-------Server setup-------
+
+Create a virtual hard disk on the VM
+fdisk /dev/sdb (to create a partition)
+      press n to create a partition
+      assign the memory to the partition
+      press w to save the changes.
+partprobe
+
+groupadd nsfgroup
+usermod -aG nfsgroup <username>
+
+mkdir /nfs
+chown <username>:nfsgroup /nfs
+cmod 775 /nfs
+
+mkfs.ext4 /dev/sdb (create ext4 file system on /dev/sdb)
+edit the /etc/fstab
+add the entry 
+/dev/sdb  /nfs  ext4  defaults,usrquota,grpquota  0 0
+save the file
+
+mount -a ( to mount all the partitions which are specified in the fstab )
+sudo yum install nfs-utils
+vi /etc/exports
+/nfs 192.168.x.x(rw,sync,no_root_quota,no_subtree_check)
+save the file
+
+exprotfs -a
+
+quotacheck -cuvg /nfs
+edquota <username>
+quotaon /nfs
+quota is enabled for the user on /nfs.
+iptables -F
+--------Client Setup---------
+
+sudo yum install nfs-utils
+showmount -e 192.168.x.x (server ip address)
+mount -t nfs 192.168.x.x:/nfs /mnt/nfs
+
+vi /etc/fstab
+192.168.x.x:/nfs  /mnt/nfs  nfs defaults  0 0
+save the file
+
+mount -a
+
+client setup is done.
