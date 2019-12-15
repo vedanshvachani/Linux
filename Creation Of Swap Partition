@@ -1,0 +1,26 @@
+                                              Creation of Swap Partition
+
+fdisk -l
+check how many partition if created
+fdisk /dev/sda
+use p to print all the partition
+use n to create extended partition 
+give the size
+then use n again to create logical partition
+give the size
+then press t to give the id to the logical partition
+To see all the id's you can press 'L'.
+Select swap from that list which is id number 82
+then press p to see all the changes.
+then press w to write all the changes if its fine.
+mkswap /dev/sda5 (swap partition number)
+swapon /dev/sda5 
+nano /etc/fstab ( to write swap partiton entries so that it can be mounted everytime)
+  /dev/sda5 swap swap defaults 0 0
+save the file
+mount -a ( to mount all the partition that are presented on /etc/fstab)
+
+Swap partition is created
+
+To check if swap partition is working
+swapon -s
