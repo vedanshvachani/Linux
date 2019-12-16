@@ -1,0 +1,49 @@
+                                                SELinux
+
+Security Enhanced Linux is an additional layer of security that is provided by redhat. 
+The main goal is to protect the data.
+In SELinux every file, directory has a special label called a SELinux context.
+Context is basically a SELinux policy given to the directory or a file wether the process 
+can access the file or directory. 
+SELinux has several context user, role, type and sensitivity. 
+
+Configuration file for selinux is /etc/selinux/config
+In this you will see all the modes and which mode is active. 
+
+Commands.
+1.) ls -lZ 
+To check the SELinux permission of a file or process or directory. 
+-l will the show the normal permission of a file or directory
+-Z will show you the SELinux rules of a file or directory.
+
+2.) getenforce
+To check the current mode of SELinux.
+There are three modes of SELinux
+  a.) enforcing mode = Tells that all the SELinux is enable and running.
+  b.) Permissiove mode = Its mostly used for troubleshooting issues. In permissive mode the 
+                         SELinux policies are not enforced. The SELinux doesnot deny any operation
+                         but it keeps logs.
+  c.) Disabled mode = SELinux is disabled. 
+
+3.) setenforce [1/0/Enforcing/Permissive]
+To modify the mode of selinux. 1 is used to switch into enforcing mode, 0 is used to switch into Permissive mode
+
+4.) getsebool -a
+Show all the SELinux booleans and their current values. 
+SELinux booleans are used to change the behavior of the SELinux policy. 
+
+5.) setsebool -P <boolean> [on|off]
+Change the SELinux boolean status to yes or no
+
+6.) chcon <-u user> <-r role> <-t type> file 
+Change the file SELinux security context of a file or directory.
+
+7.) restorecon -v 
+It restores default SELinux contexts . 
+
+// Both chcon and restorecon are used to change the context of a file. But restorecon is much safer than chcon. 
+// While using chcon mistakes can happen while specifying the context manually.
+
+7.) semanage boolean -l 
+Shows the status of the boolean. 
+
