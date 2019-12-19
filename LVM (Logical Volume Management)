@@ -1,0 +1,40 @@
+                                            LVM (Logical Volume Management)
+
+Create a partition
+fdisk /dev/sdb
+  use n to create a new partition
+  allocate the space
+  then press t to change the type of partition
+  You can press L to see the list and from that list select Linux LVM (8e)
+  type 8e
+  use w to write the changes 
+partprobe
+
+Creation of LVM
+pvcreate /dev/sdb1 ( create a physical volume /dev/sdb1 )
+vgcreate lvm-test /dev/sdb1 ( creates a volume group named as lvm-test )
+lvcreate -n <name> -L <size> lvm-test ( -n is used for name of the logical volume, 
+                                        -L is used to give the size for that volume,
+                                        and you have to specify the volume group in which you have to add this logical volume.)
+
+Your logical volume has been created.
+
+Display the LVM
+pvdisplay /dev/sdb1 ( display the settings/configuration for physical volume )
+vgdisplay lvm-test ( display the settings/configuration for volume group )
+lvdisplay /dev/lvm-test/<name> (display the settings/configuration for logical volume )
+
+Remove the Volume group
+vgremove lvm-test
+
+Remove the Physical Volume
+pvremove /dev/sdb1
+
+Remove the Logical Volume
+lvremove /dev/lvm-test/<name>
+
+Extend the LVM
+lvextend -L <size> <name> ( <name> is usually /dev/<volume-group>/<logical-volume> )
+
+Reduce the size of LVM
+lvreduce -L <size> <name> ( <name> is usually /dev/<volume-group>/<logical-volume> )
